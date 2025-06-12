@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Registration - Fast & Furious Car Showroom</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2><a href="index.html">F&F SHOWROOM</a></h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a href="services.html" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link active">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h1 class="page-title">Contact & Registration</h1>
+                <p class="page-subtitle">Get in touch or create your account</p>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h2>Get In Touch</h2>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <h3>📍 Location</h3>
+                                <p>Fast & Furious Car Showroom<br>New Road, Kathmandu</p>
+                            </div>
+                            <div class="contact-item">
+                                <h3>📞 Phone</h3>
+                                <p>+977-9876543210<br>+977-9876543210</p>
+                            </div>
+                            <div class="contact-item">
+                                <h3>✉ Email</h3>
+                                <p>info@ffshowroom.com<br>sales@ffshowroom.com</p>
+                            </div>
+                            <div class="contact-item">
+                                <h3>🕒 Hours</h3>
+                                <p>Sunday: 6:00 AM - 6:00 PM<br>Monday: 6:00 AM - 6:00 PM<br>Tuesday: 6:00 AM - 6:00 PM<br>Wednesday: 6:00 AM - 6:00 PM<br>Thursday: 6:00 AM - 6:00 PM<br>Friday: 6:00 AM - 6:00 PM<br>Saturday: Close</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <div class="form-tabs">
+                            <button class="tab-btn active" onclick="showTab('contact')">Contact Us</button>
+                            <button class="tab-btn" onclick="showTab('register')">Register</button>
+                            <button class="tab-btn" onclick="showTab('login')">Login</button>
+                        </div>
+
+                        <!-- Contact Form -->
+                        <div id="contact-form" class="form-content active">
+                            <h3>Send Us a Message</h3>
+                            <form class="contact-form" id="contactForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name *</label>
+                                        <input type="text" id="firstName" name="firstName" required pattern="[A-Za-z]+">
+                                        <span class="error-message" id="firstNameError"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name *</label>
+                                        <input type="text" id="lastName" name="lastName" required pattern="[A-Za-z]+">
+                                        <span class="error-message" id="lastNameError"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" name="email" required>
+                                    <span class="error-message" id="emailError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" pattern="[0-9]+">
+                                    <span class="error-message" id="phoneError"></span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="interest">Interested In</label>
+                                        <select id="interest" name="interest" style="color: black;">
+                                            <option value="">Select an option</option>
+                                            <option value="sports-car">Sports Car</option>
+                                            <option value="luxury-sedan">Luxury Sedan</option>
+                                            <option value="supercar">Supercar</option>
+                                            <option value="classic-car">Classic Car</option>
+                                            <option value="electric-vehicle">Electric Vehicle</option>
+                                            <option value="luxury-suv">Luxury SUV</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="testDriveDate">Preferred Test Drive Date</label>
+                                        <input type="date" id="testDriveDate" name="testDriveDate">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="message">Message *</label>
+                                    <textarea id="message" name="message" rows="4" required placeholder="Tell us about your automotive needs..."></textarea>
+                                    <span class="error-message" id="messageError"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Send Message</button>
+                            </form>
+                        </div>
+
+                        <!-- Registration Form -->
+                        <div id="register-form" class="form-content">
+                            <h3>Create Account</h3>
+                            <form class="register-form" id="registerForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="regFirstName">First Name *</label>
+                                        <input type="text" id="regFirstName" name="regFirstName" required pattern="[A-Za-z]+">
+                                        <span class="error-message" id="regFirstNameError"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="regLastName">Last Name *</label>
+                                        <input type="text" id="regLastName" name="regLastName" required pattern="[A-Za-z]+">
+                                        <span class="error-message" id="regLastNameError"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="regEmail">Email Address *</label>
+                                    <input type="email" id="regEmail" name="regEmail" required>
+                                    <span class="error-message" id="regEmailError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="regPhone">Phone Number *</label>
+                                    <input type="tel" id="regPhone" name="regPhone" required pattern="[0-9]+">
+                                    <span class="error-message" id="regPhoneError"></span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="regPassword">Password *</label>
+                                        <input type="password" id="regPassword" name="regPassword" required>
+                                        <span class="error-message" id="regPasswordError"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirm Password *</label>
+                                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                                        <span class="error-message" id="confirmPasswordError"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthDate">Date of Birth *</label>
+                                    <input type="date" id="birthDate" name="birthDate" required>
+                                    <span class="error-message" id="birthDateError"></span>
+                                </div>
+                                <div class="form-group checkbox-group">
+                                    <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                    <label for="agreeTerms">I agree to the Terms of Service and Privacy Policy *</label>
+                                    <span class="error-message" id="agreeTermsError"></span>
+                                </div>
+                                <div class="form-group checkbox-group">
+                                    <input type="checkbox" id="newsletter" name="newsletter">
+                                    <label for="newsletter">Subscribe to our newsletter for updates and exclusive offers</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Create Account</button>
+                            </form>
+                        </div>
+
+                        <!-- Login Form -->
+                        <div id="login-form" class="form-content">
+                            <h3>Sign In</h3>
+                            <form class="login-form" id="loginForm">
+                                <div class="form-group">
+                                    <label for="loginEmail">Email Address *</label>
+                                    <input type="email" id="loginEmail" name="loginEmail" required>
+                                    <span class="error-message" id="loginEmailError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginPassword">Password *</label>
+                                    <input type="password" id="loginPassword" name="loginPassword" required>
+                                    <span class="error-message" id="loginPasswordError"></span>
+                                </div>
+                                <div class="form-group checkbox-group">
+                                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                                    <label for="rememberMe">Remember me</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Sign In</button>
+                                <a href="#" class="forgot-password">Forgot your password?</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="map-section">
+            <div class="container">
+                <h2 class="section-title">Visit Our Showroom</h2>
+                <div class="map-placeholder">
+                    <div class="map-content">
+                        <h3>📍 Fast & Furious Car Showroom</h3>
+                        <p>New Road, Kathmandu</p>
+                        <p>Located in the heart of the automotive district, our state-of-the-art showroom features the latest in luxury and performance vehicles. Ample parking available for test drives.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+<footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>F&F Showroom</h3>
+                    <p>We are your premier destination for high-performance vehicles, offering an exceptional selection of powerful automobiles and personalized customer service.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p>📍 F&F Car Showroom, New Road, Kathmandu</p>
+                    <p>📞 +977-9876543210</p>
+                    <p>✉️ info@ffshowroom.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Fast & Furious Car Showroom. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Allow only letters
+        document.querySelectorAll('input[pattern="[A-Za-z]+"]').forEach(input => {
+            input.addEventListener('input', () => {
+                input.value = input.value.replace(/[^a-zA-Z]/g, '');
+            });
+        });
+
+        // Allow only numbers
+        document.querySelectorAll('input[pattern="[0-9]+"]').forEach(input => {
+            input.addEventListener('input', () => {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
+</body>
+</html>
