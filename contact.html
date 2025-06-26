@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact & Registration - Fast & Furious Car Showroom</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="logo.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -255,20 +256,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        // Allow only letters
-        document.querySelectorAll('input[pattern="[A-Za-z]+"]').forEach(input => {
-            input.addEventListener('input', () => {
-                input.value = input.value.replace(/[^a-zA-Z]/g, '');
-            });
-        });
-
-        // Allow only numbers
-        document.querySelectorAll('input[pattern="[0-9]+"]').forEach(input => {
-            input.addEventListener('input', () => {
-                input.value = input.value.replace(/[^0-9]/g, '');
-            });
-        });
-    </script>
 </body>
 </html>

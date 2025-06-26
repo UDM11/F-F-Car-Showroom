@@ -42,6 +42,20 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// Allow only letters
+document.querySelectorAll('input[pattern="[A-Za-z]+"]').forEach(input => {
+    input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^a-zA-Z]/g, '');
+    });
+});
+
+// Allow only numbers
+document.querySelectorAll('input[pattern="[0-9]+"]').forEach(input => {
+    input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    });
+});
+
 // Tab functionality for contact page
 window.showTab = (tabName) => {
     // Hide all form contents
@@ -362,65 +376,20 @@ function setupScrollAnimations() {
     });
 }
 
-// Chatbot System - Updated with FastAPI integration
+// Chatbot System
 class ChatbotSystem {
     constructor() {
         this.isOpen = false;
         this.messages = [];
-        this.apiEndpoint = 'http://localhost:8000/chat'; // Update with your FastAPI endpoint
-        this.responses = {
-            greetings: [
-                "Hello! Welcome to Fast & Furious Car Showroom! 🏎️ How can I help you today?",
-                "Hi there! I'm here to assist you with any questions about our premium vehicles!",
-                "Welcome! Looking for your dream car? I'm here to help!"
-            ],
-            cars: [
-                "We have an amazing collection of sports cars, luxury sedans, supercars, and classic vehicles. What type of car interests you?",
-                "Our inventory includes Ferrari, Lamborghini, Porsche, McLaren, Aston Martin, and Bentley. Which brand catches your eye?",
-                "From high-performance sports cars to elegant luxury sedans, we have something for every automotive enthusiast!"
-            ],
-            services: [
-                "We offer comprehensive services including car sales, maintenance & repair, financing options, and extended warranties. What would you like to know more about?",
-                "Our services include new and pre-owned vehicle sales, certified maintenance, flexible financing, and complete warranty coverage.",
-                "We provide full automotive solutions: sales, service, financing, and protection plans. How can we assist you?"
-            ],
-            testDrive: [
-                "I'd be happy to help you schedule a test drive! You can book one through our contact page or I can guide you through the process.",
-                "Test drives are available for all our vehicles! Would you like me to help you schedule one for a specific car?",
-                "Ready to experience the thrill? Let's get you behind the wheel! Which vehicle would you like to test drive?"
-            ],
-            financing: [
-                "We offer competitive financing options with flexible terms. Our finance team can help you find the perfect payment plan for your budget.",
-                "Our financing options include auto loans, lease programs, and insurance assistance. Would you like to speak with our finance specialist?",
-                "We work with multiple lenders to get you the best rates. Our finance team can pre-approve you in minutes!"
-            ],
-            contact: [
-                "You can reach us at +977-9876543210 or visit us at Fast & Furious Car Showroom, New Road, Kathmandu. We're open Sun-Fri 6AM-6PM, Saturday Closed.",
-                "Our showroom is located at Fast & Furious Car Showroom, New Road, Kathmandu. You can also email us at info@ffshowroom.com or call +977-9876543210",
-                "We're here to help! Visit our contact page for all our details, or call us directly at +977-9876543210. Our showroom is located at New Road, Kathmandu."
-            ],
-            default: [
-                "I'm checking our resources for you...",
-                "Let me look that up for you...",
-                "I'll find the best information about that..."
-            ]
-        };
+        this.apiEndpoint = 'http://localhost:8000/chat'; // Your FastAPI endpoint
+        this.hasWelcomed = false;
         
-        this.quickReplies = [
-            "View Cars",
-            "Schedule Test Drive",
-            "Financing Options",
-            "Contact Info",
-            "Services"
-        ];
-
         this.init();
     }
 
     init() {
         this.createChatbotHTML();
         this.setupEventListeners();
-        this.addWelcomeMessage();
     }
 
     createChatbotHTML() {
@@ -455,7 +424,13 @@ class ChatbotSystem {
         const input = document.getElementById('chatbotInput');
         const send = document.getElementById('chatbotSend');
 
-        toggle.addEventListener('click', () => this.toggleChatbot());
+        toggle.addEventListener('click', () => {
+            this.toggleChatbot();
+            if (this.isOpen && !this.hasWelcomed) {
+                this.showWelcomeMessage();
+                this.hasWelcomed = true;
+            }
+        });
         
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -465,12 +440,17 @@ class ChatbotSystem {
         
         send.addEventListener('click', () => this.sendMessage());
 
-        // Close chatbot when clicking outside
+        // Close chatbot
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.chatbot-container') && this.isOpen) {
                 this.toggleChatbot();
             }
         });
+    }
+
+    showWelcomeMessage() {
+        const welcomeMessage = "Welcome to Fast & Furious Car Showroom! 🏎️\nHow can I assist you today?";
+        this.addMessage('bot', welcomeMessage);
     }
 
     toggleChatbot() {
@@ -486,12 +466,7 @@ class ChatbotSystem {
         }
     }
 
-    addWelcomeMessage() {
-        const welcomeMessage = this.getRandomResponse('greetings');
-        this.addMessage('bot', welcomeMessage, this.quickReplies);
-    }
-
-    addMessage(sender, content, quickReplies = null) {
+    addMessage(sender, content) {
         const messagesContainer = document.getElementById('chatbotMessages');
         const messageElement = document.createElement('div');
         messageElement.className = `message ${sender}`;
@@ -506,23 +481,6 @@ class ChatbotSystem {
         
         messageElement.appendChild(avatar);
         messageElement.appendChild(messageContent);
-        
-        if (quickReplies && sender === 'bot') {
-            const repliesContainer = document.createElement('div');
-            repliesContainer.className = 'quick-replies';
-            
-            quickReplies.forEach(reply => {
-                const replyButton = document.createElement('button');
-                replyButton.className = 'quick-reply';
-                replyButton.textContent = reply;
-                replyButton.addEventListener('click', () => {
-                    this.handleQuickReply(reply);
-                });
-                repliesContainer.appendChild(replyButton);
-            });
-            
-            messageContent.appendChild(repliesContainer);
-        }
         
         messagesContainer.appendChild(messageElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -543,26 +501,19 @@ class ChatbotSystem {
         this.showTypingIndicator();
         
         try {
-            // First try to get a response from the FastAPI backend
             const apiResponse = await this.getAPIResponse(message);
             
             if (apiResponse && apiResponse.answer) {
                 this.hideTypingIndicator();
                 this.addMessage('bot', apiResponse.answer);
             } else {
-                // If no API response, use the local response system
-                setTimeout(() => {
-                    this.hideTypingIndicator();
-                    this.generateResponse(message);
-                }, 1000 + Math.random() * 1000);
+                this.hideTypingIndicator();
+                this.addMessage('bot', "I couldn't get a response. Please try again.");
             }
         } catch (error) {
             console.error('API Error:', error);
-            // Fallback to local responses if API fails
-            setTimeout(() => {
-                this.hideTypingIndicator();
-                this.generateResponse(message);
-            }, 1000 + Math.random() * 1000);
+            this.hideTypingIndicator();
+            this.addMessage('bot', "Sorry, I'm having trouble connecting to the server.");
         }
     }
 
@@ -583,20 +534,8 @@ class ChatbotSystem {
             return await response.json();
         } catch (error) {
             console.error('Error fetching from API:', error);
-            return null;
+            throw error;
         }
-    }
-
-    handleQuickReply(reply) {
-        this.addMessage('user', reply);
-        
-        // Show typing indicator
-        this.showTypingIndicator();
-        
-        setTimeout(() => {
-            this.hideTypingIndicator();
-            this.generateResponse(reply);
-        }, 800);
     }
 
     showTypingIndicator() {
@@ -626,112 +565,9 @@ class ChatbotSystem {
             typingIndicator.remove();
         }
     }
-
-    generateResponse(message) {
-        const lowerMessage = message.toLowerCase();
-        let response;
-        let quickReplies = null;
-        
-        if (this.containsKeywords(lowerMessage, ['hello', 'hi', 'hey', 'good morning', 'good afternoon'])) {
-            response = this.getRandomResponse('greetings');
-            quickReplies = this.quickReplies;
-        } else if (this.containsKeywords(lowerMessage, ['car', 'vehicle', 'ferrari', 'lamborghini', 'porsche', 'sports car', 'luxury'])) {
-            response = this.getRandomResponse('cars');
-            quickReplies = ['Schedule Test Drive', 'View Inventory', 'Financing Options'];
-        } else if (this.containsKeywords(lowerMessage, ['service', 'maintenance', 'repair', 'warranty'])) {
-            response = this.getRandomResponse('services');
-            quickReplies = ['Book Service', 'Warranty Info', 'Contact Service'];
-        } else if (this.containsKeywords(lowerMessage, ['test drive', 'drive', 'schedule', 'book', 'appointment'])) {
-            response = this.getRandomResponse('testDrive');
-            quickReplies = ['Contact Page', 'Call Now', 'View Cars'];
-        } else if (this.containsKeywords(lowerMessage, ['finance', 'financing', 'loan', 'payment', 'lease', 'price'])) {
-            response = this.getRandomResponse('financing');
-            quickReplies = ['Get Pre-Approved', 'Contact Finance', 'View Cars'];
-        } else if (this.containsKeywords(lowerMessage, ['contact', 'phone', 'address', 'location', 'hours', 'email'])) {
-            response = this.getRandomResponse('contact');
-            quickReplies = ['Call Now', 'Get Directions', 'Send Email'];
-        } else if (this.containsKeywords(lowerMessage, ['thank', 'thanks', 'bye', 'goodbye'])) {
-            response = "Thank you for visiting Fast & Furious Car Showroom! Feel free to reach out anytime. Have a great day! 🏎️";
-        } else {
-            response = this.getRandomResponse('default');
-            quickReplies = this.quickReplies;
-        }
-        
-        this.addMessage('bot', response, quickReplies);
-    }
-
-    containsKeywords(message, keywords) {
-        return keywords.some(keyword => message.includes(keyword));
-    }
-
-    getRandomResponse(category) {
-        const responses = this.responses[category];
-        return responses[Math.floor(Math.random() * responses.length)];
-    }
 }
 
-// Initialize everything when DOM is loaded
+// Initialize chatbot when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    setupRealTimeValidation();
-    setupFormHandlers();
-    setupDatePickers();
-    setupScrollAnimations();
-    
-    // Initialize chatbot with FastAPI integration
     new ChatbotSystem();
 });
-
-// Loading animation for page transitions
-window.addEventListener('beforeunload', function() {
-    document.body.style.opacity = '0.7';
-});
-
-// Performance optimization: Lazy loading for images
-function setupLazyLoading() {
-    if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.classList.remove('lazy');
-                    observer.unobserve(img);
-                }
-            });
-        });
-
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
-        });
-    }
-}
-
-// Call lazy loading setup
-setupLazyLoading();
-
-// Accessibility improvements
-function setupAccessibility() {
-    // Add keyboard navigation for custom elements
-    document.querySelectorAll('.car-card, .category-card').forEach(card => {
-        card.setAttribute('tabindex', '0');
-        card.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                card.click();
-            }
-        });
-    });
-
-    // Announce form errors to screen readers
-    document.querySelectorAll('.error-message').forEach(error => {
-        error.setAttribute('aria-live', 'polite');
-    });
-}
-
-// Initialize accessibility features
-setupAccessibility();
-
-// Console welcome message
-console.log('%c🏎️ Welcome to Fast & Furious Car Showroom! 🏎️', 'color: #00d9ff; font-size: 20px; font-weight: bold;');
-console.log('%cExperience the thrill of premium automotive excellence', 'color: #ff4757; font-size: 14px;');
-console.log('%c🤖 Chatbot system initialized and ready to assist!', 'color: #00d9ff; font-size: 14px;');
