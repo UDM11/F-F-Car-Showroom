@@ -129,17 +129,89 @@ function setupRealTimeValidation() {
         });
     });
 
-    // Phone validation
+   // Remove any non-digit characters and limit input to 10 digits
     document.querySelectorAll('input[type="tel"]').forEach(input => {
-        input.addEventListener('blur', function() {
-            if (this.value && !validatePhone(this.value)) {
-                showError(this.id, 'Please enter a valid phone number');
+        // Prevent typing more than 10 digits (allow control keys)
+        input.addEventListener('keydown', function (e) {
+            const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'];
+            if (this.value.length >= 10 &&
+                !allowedKeys.includes(e.key) &&
+                !(e.ctrlKey && ['a', 'c', 'v', 'x'].includes(e.key.toLowerCase()))
+            ) {
+                e.preventDefault();
+            }
+        });
+
+    // On input, keep only digits and trim to 10 chars max
+    input.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '').slice(0, 10);
+    });
+
+    // On blur, validate length and show error if invalid
+        input.addEventListener('blur', function () {
+            if (this.value.length !== 10) {
+                showError(this.id, 'Phone number must be exactly 10 digits');
             } else {
                 clearError(this.id);
             }
         });
     });
 
+    // Validation function for phone number (exactly 10 digits)
+    function validatePhone(phone) {
+        const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+        return /^\d{10}$/.test(cleaned);
+    }
+
+    // Show error message helper
+    function showError(id, message) {
+        const field = document.getElementById(id);
+        if (!field) return;
+
+        let error = document.getElementById(id + '-error');
+        if (!error) {
+            error = document.createElement('div');
+            error.id = id + '-error';
+            error.className = 'error-message';
+            error.style.color = 'red';
+            error.style.fontSize = '13px';
+            error.style.marginTop = '5px';
+            field.parentNode.appendChild(error);
+        }
+        error.textContent = message;
+    }
+
+    // Clear error message helper
+    function clearError(id) {
+        const error = document.getElementById(id + '-error');
+        if (error) error.remove();
+    }
+
+
+    // Error display helpers
+    function showError(id, message) {
+        const field = document.getElementById(id);
+        if (!field) return;
+
+        let error = document.getElementById(id + '-error');
+        if (!error) {
+            error = document.createElement('div');
+            error.id = id + '-error';
+            error.className = 'error-message';
+            error.style.color = 'red';
+            error.style.fontSize = '13px';
+            error.style.marginTop = '5px';
+            field.parentNode.appendChild(error);
+        }
+        error.textContent = message;
+    }
+
+    function clearError(id) {
+        const error = document.getElementById(id + '-error');
+        if (error) error.remove();
+    }
+
+    
     // Password validation
     document.querySelectorAll('input[type="password"]').forEach(input => {
         input.addEventListener('blur', function() {
@@ -570,4 +642,11 @@ class ChatbotSystem {
 // Initialize chatbot when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     new ChatbotSystem();
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    setupRealTimeValidation();
+    setupFormHandlers();
+    setupDatePickers();
+    setupScrollAnimations();
 });

@@ -6,10 +6,12 @@ from app.chat_logic import get_chat_chain
 
 app = FastAPI(title="Static PDF RAG Chatbot")
 
-# Enable CORS to allow frontend access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace '*' with your frontend URL(s)
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -23,7 +25,6 @@ embed_and_store(docs)
 # Initialize the chat chain
 chat_chain = get_chat_chain()
 
-# Request model
 class ChatRequest(BaseModel):
     question: str
 
@@ -35,7 +36,6 @@ def root():
 async def chat_with_bot(request: ChatRequest):
     try:
         response = chat_chain.invoke({"question": request.question})
-        # If response is a dict or object with 'answer' key, extract it, else return full response
         answer = response.get("answer") if isinstance(response, dict) else response
         return {"answer": answer}
     except Exception as e:
