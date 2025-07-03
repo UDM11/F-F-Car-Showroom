@@ -477,6 +477,7 @@ class ChatbotSystem {
                             <h3>F&F Assistant</h3>
                             <p>Online • Ready to help</p>
                         </div>
+                        <button class="chatbot-close" id="chatbotClose">✕</button>
                     </div>
                     <div class="chatbot-messages" id="chatbotMessages"></div>
                     <div class="chatbot-input">
@@ -492,9 +493,9 @@ class ChatbotSystem {
 
     setupEventListeners() {
         const toggle = document.getElementById('chatbotToggle');
-        const window = document.getElementById('chatbotWindow');
         const input = document.getElementById('chatbotInput');
         const send = document.getElementById('chatbotSend');
+        const close = document.getElementById('chatbotClose');
 
         toggle.addEventListener('click', () => {
             this.toggleChatbot();
@@ -502,6 +503,10 @@ class ChatbotSystem {
                 this.showWelcomeMessage();
                 this.hasWelcomed = true;
             }
+        });
+        
+        close.addEventListener('click', () => {
+            this.toggleChatbot();
         });
         
         input.addEventListener('keypress', (e) => {
@@ -512,7 +517,6 @@ class ChatbotSystem {
         
         send.addEventListener('click', () => this.sendMessage());
 
-        // Close chatbot
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.chatbot-container') && this.isOpen) {
                 this.toggleChatbot();
