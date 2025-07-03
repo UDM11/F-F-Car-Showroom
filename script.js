@@ -455,6 +455,7 @@ class ChatbotSystem {
         this.messages = [];
         this.apiEndpoint = 'http://localhost:8000/chat'; // Your FastAPI endpoint
         this.hasWelcomed = false;
+        this.originalOverflow = '';
         
         this.init();
     }
@@ -538,7 +539,13 @@ class ChatbotSystem {
         window.classList.toggle('active');
         
         if (this.isOpen) {
+            // Save original overflow value and disable scroll
+            this.originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
             document.getElementById('chatbotInput').focus();
+        } else {
+            // Restore original overflow value
+            document.body.style.overflow = this.originalOverflow;
         }
     }
 
