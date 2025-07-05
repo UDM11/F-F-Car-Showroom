@@ -553,72 +553,62 @@ class ChatbotSystem {
         const messagesContainer = document.getElementById('chatbotMessages');
         const messageElement = document.createElement('div');
         messageElement.className = `message ${sender}`;
-        
+
         const avatar = document.createElement('div');
         avatar.className = 'message-avatar';
         avatar.textContent = sender === 'bot' ? '🤖' : '👤';
-        
+
         const messageContent = document.createElement('div');
         messageContent.className = 'message-content';
         messageContent.textContent = content;
-        
+
         messageElement.appendChild(avatar);
         messageElement.appendChild(messageContent);
-        
+
         messagesContainer.appendChild(messageElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
+
         this.messages.push({ sender, content, timestamp: new Date() });
     }
 
     async sendMessage() {
         const input = document.getElementById('chatbotInput');
         const message = input.value.trim();
-        
         if (!message) return;
-        
+
         this.addMessage('user', message);
         input.value = '';
-        
-        // Show typing indicator
+
         this.showTypingIndicator();
-        
+
         try {
             const apiResponse = await this.getAPIResponse(message);
-            
+
+            this.hideTypingIndicator();
             if (apiResponse && apiResponse.answer) {
-                this.hideTypingIndicator();
                 this.addMessage('bot', apiResponse.answer);
             } else {
-                this.hideTypingIndicator();
                 this.addMessage('bot', "I couldn't get a response. Please try again.");
             }
         } catch (error) {
-            console.error('API Error:', error);
             this.hideTypingIndicator();
             this.addMessage('bot', "Sorry, I'm having trouble connecting to the server.");
+            console.error('API Error:', error);
         }
     }
 
     async getAPIResponse(message) {
-        try {
-            const response = await fetch(this.apiEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ question: message })
-            });
-            
-            if (!response.ok) {
-                throw new Error('API request failed');
-            }
-            
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching from API:', error);
-            throw error;
+        const response = await fetch(this.apiEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: message })
+        });
+
+        if (!response.ok) {
+            throw new Error('API request failed');
         }
+
+        return await response.json();
     }
 
     showTypingIndicator() {
@@ -626,7 +616,7 @@ class ChatbotSystem {
         const typingElement = document.createElement('div');
         typingElement.className = 'message bot';
         typingElement.id = 'typingIndicator';
-        
+
         typingElement.innerHTML = `
             <div class="message-avatar">🤖</div>
             <div class="typing-indicator">
@@ -637,27 +627,23 @@ class ChatbotSystem {
                 </div>
             </div>
         `;
-        
+
         messagesContainer.appendChild(typingElement);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     hideTypingIndicator() {
         const typingIndicator = document.getElementById('typingIndicator');
-        if (typingIndicator) {
-            typingIndicator.remove();
-        }
+        if (typingIndicator) typingIndicator.remove();
     }
 }
 
 // Initialize chatbot when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    new ChatbotSystem();
-});
-
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     setupRealTimeValidation();
     setupFormHandlers();
     setupDatePickers();
     setupScrollAnimations();
+
+    new ChatbotSystem();
 });
