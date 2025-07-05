@@ -864,10 +864,10 @@ h1, h2, h3, h4, h5, h6 {
 .form-group textarea {
     width: 100%;
     padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(242, 242, 242, 0.796);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    color: #ffffff;
+    color: #000000;
     font-size: 1rem;
     transition: all 0.3s ease;
 }
@@ -936,19 +936,6 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     border: 1px solid rgba(0, 217, 255, 0.2);
     margin-top: 3rem;
-}
-
-.map-content h3 {
-    color: #00d9ff;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-}
-
-.map-content p {
-    color: #cccccc;
-    line-height: 1.6;
-    max-width: 600px;
-    margin: 0 auto;
 }
 
 /* RESPONSIVE CHATBOT SYSTEM */
