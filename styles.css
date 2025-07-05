@@ -951,8 +951,7 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0 auto;
 }
 
-/* ===== RESPONSIVE CHATBOT SYSTEM ===== */
-
+/* RESPONSIVE CHATBOT SYSTEM */
 /* Chatbot Container - Base Positioning */
 .chatbot-container {
     position: fixed;
@@ -1313,8 +1312,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: none;
 }
 
-/* ===== MOBILE RESPONSIVE STYLES ===== */
-
+/* MOBILE RESPONSIVE STYLES */
 /* Tablet Breakpoint */
 @media (max-width: 1024px) {
     .chatbot-window {
@@ -1404,7 +1402,7 @@ h1, h2, h3, h4, h5, h6 {
         text-align: center;
     }
 
-    /* ===== MOBILE CHATBOT STYLES ===== */
+    /* MOBILE CHATBOT STYLES */
     
     .chatbot-container {
         bottom: 1rem;
@@ -1634,7 +1632,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #999999;
 }
 
-/* ===== ANIMATIONS ===== */
+/* ANIMATIONS */
 
 @keyframes fadeInUp {
     from {
@@ -1692,8 +1690,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* ===== ACCESSIBILITY & SPECIAL FEATURES ===== */
-
+/* ACCESSIBILITY & SPECIAL FEATURES */
 /* High Contrast Mode */
 @media (prefers-contrast: high) {
     .navbar,
