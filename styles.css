@@ -882,7 +882,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: #999999;
+    color: #000000;
 }
 
 .checkbox-group {
